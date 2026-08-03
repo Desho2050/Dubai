@@ -305,7 +305,7 @@
     async function loadUsers() {
       try {
         const { data, error } = await supabaseClient
-          .from('login')
+          .from('logindubai')
           .select('username')
           .order('username', { ascending: true });
 
@@ -328,7 +328,7 @@
 async function loadUsers() {
       try {
         const { data, error } = await supabaseClient
-          .from('login')
+          .from('logindubai')
           .select('username')
           .order('username', { ascending: true });
 
@@ -467,7 +467,7 @@ async function loadUsers() {
       try {
         // Query the login table for the selected username
         const { data, error } = await supabaseClient
-          .from('login')
+          .from('logindubai')
           .select('*')
           .eq('username', username)
           .single();
