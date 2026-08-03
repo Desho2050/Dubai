@@ -348,7 +348,7 @@
     applyLang(currentLang);
 
     // Load users into dropdown
-    async function loadUsers() {
+   async function loadUsers() {
       try {
         const { data, error } = await supabaseClient
           .from('logindubai')
@@ -358,6 +358,7 @@
         if (error) throw error;
 
         const select = document.getElementById('username');
+        // Keep the first option
         while (select.options.length > 1) select.remove(1);
         data.forEach(row => {
           const opt = document.createElement('option');
@@ -365,11 +366,14 @@
           opt.textContent = row.username;
           select.appendChild(opt);
         });
+        if (select.options.length > 1) {
+          select.selectedIndex = 1;
+        }
       } catch (err) {
         console.error('Failed to load users:', err);
       }
     }
-
+    loadUsers();
     loadUsers();
 
     // Alert helper
