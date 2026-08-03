@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -227,10 +228,10 @@
     // SUPABASE CONFIG - Replace with your values
     // ============================================
  
-    // ⚠ ï¸ڈ SECURITY: Use the 'anon' (public) key from Supabase Dashboard → Settings → API
+    // ⚠ ï¸ڈ SECURITY: Use the 'anon' (public) key from Supabase Dashboard → Settings → API
     // NEVER use the service_role key in frontend code — it bypasses Row Level Security!
-    const SUPABASE_URL = 'https://czxgtmfsgdcyyvebjcnv.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN6eGd0bWZzZ2RjeXl2ZWJqY252Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU1MTQ1MDMsImV4cCI6MjEwMTA5MDUwM30.KNYmDUsfYMb_BJ8twpWjVGQcpOmgpV6-l3vle7RdhvQ';
+    const SUPABASE_URL = 'https://gecghwcqgxmitcsjbnst.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdlY2dod2NxZ3htaXRjc2pibnN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ4NjY3OTAsImV4cCI6MjA4MDQ0Mjc5MH0.0Kia3U-TVkSF1_4GGeeu4l3o2APMvL-xug-k8iQMM9g';
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     // ============================================
     // I18N
@@ -305,7 +306,30 @@
     async function loadUsers() {
       try {
         const { data, error } = await supabaseClient
-          .from('logindubai')
+          .from('login')
+          .select('username')
+          .order('username', { ascending: true });
+
+        if (error) throw error;
+
+        const select = document.getElementById('username');
+        // Keep the first option
+        while (select.options.length > 1) select.remove(1);
+        data.forEach(row => {
+          const opt = document.createElement('option');
+          opt.value = row.username;
+          opt.textContent = row.username;
+          select.appendChild(opt);
+          storage.save('username', row.username);
+        });
+      } catch (err) {
+        console.error('Failed to load users:', err);
+      }
+    }
+async function loadUsers() {
+      try {
+        const { data, error } = await supabaseClient
+          .from('login')
           .select('username')
           .order('username', { ascending: true });
 
@@ -444,7 +468,7 @@
       try {
         // Query the login table for the selected username
         const { data, error } = await supabaseClient
-          .from('logindubai')
+          .from('login')
           .select('*')
           .eq('username', username)
           .single();
